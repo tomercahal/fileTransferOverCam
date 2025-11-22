@@ -7,19 +7,6 @@ def main():
     print('Hello, file-Transfer-over-cam!')
     # receiver_main()
     sender_main()
-    # cam = get_web_cam()
-    # frame = get_frame(cam)
-    # get_qr_from_frame(frame)
-    # cap = cv2.VideoCapture(0)
-    # ret, frame = cap.read()
-
-    # cap.release()
-
-    # if ret:
-    #     cv2.imwrite("frame.jpg", frame)
-    #     print("Frame captured!")
-    # else:
-    #     print("Failed to grab frame")
 
 if __name__ == '__main__':
     main()
