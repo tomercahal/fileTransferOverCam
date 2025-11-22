@@ -16,10 +16,10 @@ def get_frame(web_cam : cv2.VideoCapture):
     ret, frame = web_cam.read()
 
     if ret:
-        print("Frame captured!")
         return frame
     else:
         print("Failed to grab frame")
+        return None
 
 
 def get_qr_from_frame(frame : MatLike):
@@ -29,10 +29,10 @@ def get_qr_from_frame(frame : MatLike):
 def get_next_qr_data(web_cam : cv2.VideoCapture):
     while True:
         frame = get_frame(web_cam)
-        data = get_qr_from_frame(frame)
-        if data:
-            # extract id
-            return data.encode("utf-8")
-        else:
-            print("No QR code found")
+        if frame is not None:
+            data = get_qr_from_frame(frame)
+            if data:
+                print(f"QR code detected: {data[:50]}...")  # Show first 50 chars
+                # Return the QR data as string for JSON deserialization
+                return data
         time.sleep(0.1)
