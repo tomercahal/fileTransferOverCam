@@ -1,3 +1,4 @@
+import os
 import qrcode
 import tkinter as tk
 from tkinter import filedialog
@@ -105,15 +106,23 @@ def send_approval(chunk_id):
     print(f"Approval QR displayed for chunk {chunk_id} - keeping it visible until next chunk arrives")
 
 def choose_save_location(suggested_filename):
-    """Let user choose where to save the received file"""
+    """Let user choose directory to save the received file"""    
     root = tk.Tk()
     root.withdraw()
     
-    save_path = filedialog.asksaveasfilename(
-        defaultextension=".*",
-        initialvalue=suggested_filename,
-        title=f"Save received file: {suggested_filename}"
+    # Let user choose directory only
+    directory = filedialog.askdirectory(
+        title=f"Choose directory to save: {suggested_filename}"
     )
     
     root.destroy()
-    return save_path
+    
+    if directory:
+        # Combine directory with original filename
+        save_path = os.path.join(directory, suggested_filename)
+        return save_path
+    else:
+        # Use current directory if no selection made
+        current_dir = os.getcwd()
+        save_path = os.path.join(current_dir, suggested_filename)
+        return save_path
