@@ -6,18 +6,18 @@ import qrcode
 import os
 import base64
 
-webCam = None
-qrCode = cv2.QRCodeDetector()
+web_cam = None
+qr_code = cv2.QRCodeDetector()
 
-def getWebCam():
-    if webCam:
-        return webCam
+def get_web_cam():
+    if web_cam:
+        return web_cam
     else:
         return cv2.VideoCapture(0)
 
 
-def getFrame(webCam : cv2.VideoCapture):
-    ret, frame = webCam.read()
+def get_frame(web_cam : cv2.VideoCapture):
+    ret, frame = web_cam.read()
 
     if ret:
         print("Frame captured!")
@@ -26,14 +26,14 @@ def getFrame(webCam : cv2.VideoCapture):
         print("Failed to grab frame")
 
 
-def getQRFromFrame(frame : MatLike):
-    data, _, _ = qrCode.detectAndDecode(frame)
+def get_qr_from_frame(frame : MatLike):
+    data, _, _ = qr_code.detectAndDecode(frame)
     return data
 
-def getNextQRData(webCam : cv2.VideoCapture):
+def get_next_qr_data(web_cam : cv2.VideoCapture):
     while True:
-        frame = getFrame(webCam)
-        data = getQRFromFrame(frame)
+        frame = get_frame(web_cam)
+        data = get_qr_from_frame(frame)
         if data:
             # extract id
             return data.encode("utf-8")

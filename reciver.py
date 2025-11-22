@@ -1,20 +1,20 @@
 
-from cameraHandle import getNextQRData, getWebCam, getFrame, getQRFromFrame
+from camera_handler import get_next_qr_data, get_web_cam
 
 
 
-def reciverMain():
-    cam = getWebCam()
-    receivedFile = False
-    fileInBytes = b""
-    while not receivedFile:
-        data = getNextQRData(cam)
-        fileInBytes += data
+def receiver_main():
+    cam = get_web_cam()
+    received_file = False
+    file_in_bytes = b""
+    while not received_file:
+        data = get_next_qr_data(cam)
+        file_in_bytes += data
         
-        receivedFile = True
+        received_file = True
 
     with open("temp.txt", "wb") as f:
-        f.write(fileInBytes)
+        f.write(file_in_bytes)
 
 
 
