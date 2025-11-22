@@ -4,6 +4,7 @@ from camera_handler import get_next_qr_data, get_web_cam
 
 
 def receiver_main():
+    # Pick file directory to save in
     cam = get_web_cam()
     received_file = False
     file_in_bytes = b""
