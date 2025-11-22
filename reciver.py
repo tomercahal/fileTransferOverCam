@@ -1,7 +1,4 @@
-
 from camera_handler import get_next_qr_data, get_web_cam
-
-
 
 def receiver_main():
     # Pick file directory to save in
@@ -16,6 +13,3 @@ def receiver_main():
 
     with open("temp.txt", "wb") as f:
         f.write(file_in_bytes)
-
-
-
