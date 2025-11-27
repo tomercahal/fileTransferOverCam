@@ -113,10 +113,11 @@ def choose_save_location(suggested_filename):
     # Bring dialog to front and make it focused
     root.attributes('-topmost', True)
     root.update()
-    
+
     # Let user choose directory only
     directory = filedialog.askdirectory(
-        title=f"Choose directory to save: {suggested_filename}"
+        title=f"Choose directory to save: {suggested_filename}",
+        parent=root
     )
     
     root.destroy()

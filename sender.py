@@ -20,12 +20,21 @@ def sender_main():
         print(f"QR displayed for chunk {chunk['id']} - listening for approval...")
         wait_for_chunk_approval(cam, chunk)
         print(f"Chunk {chunk['id']} confirmed, moving to next...")
-        qr
 
 def pick_file():
     root = tk.Tk()
     root.withdraw()
-    file_path = filedialog.askopenfilename()
+    
+    # Bring dialog to front and make it focused
+    root.attributes('-topmost', True)
+    root.update()
+    
+    file_path = filedialog.askopenfilename(
+        title="Select file to transfer",
+        parent=root
+    )
+    
+    root.destroy()
     file_name = os.path.basename(file_path)
     if file_path:
         with open(file_path, "rb") as f:
