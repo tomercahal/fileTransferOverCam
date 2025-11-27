@@ -109,6 +109,10 @@ def choose_save_location(suggested_filename):
     """Let user choose directory to save the received file"""    
     root = tk.Tk()
     root.withdraw()
+
+    # Bring dialog to front and make it focused
+    root.attributes('-topmost', True)
+    root.update()
     
     # Let user choose directory only
     directory = filedialog.askdirectory(
