@@ -11,18 +11,18 @@ from protocol_utils import (
 def receiver_main():
     """Main receiver function that processes incoming QR codes and reconstructs the file"""
     cam = get_web_cam()
+    directory_to_save_in = choose_save_location()
     
     print("Waiting for file transfer to start...")
     
     file_metadata = wait_for_starting_chunk(cam)
     if not file_metadata:
-        print("Failed to receive file metadata")
+        print("Failed to receive file metadata, aborting.")
         return
     
     print(f"Receiving file: {file_metadata['file_name']}")
     print(f"Total chunks expected: {file_metadata['total_chunks']}")
-    
-    save_path = choose_save_location(file_metadata['file_name'])
+    save_path = os.path.join(directory_to_save_in, file_metadata['file_name'])
     if not save_path:
         # Use default location if no selection made
         save_path = f"received_{file_metadata['file_name']}"
@@ -37,10 +37,10 @@ def receiver_main():
             f.write(file_data)
         print(f"File saved successfully to: {save_path}")
     else:
-        print("Failed to receive complete file data")
+        print("Failed to receive complete file data, aborting.")
 
 def wait_for_starting_chunk(cam):
-    """Wait for and process the starting chunk containing file metadata"""
+    """Wait for starting chunk and process the chunk that contains the file metadata"""
     while True:
         print("Scanning for starting chunk...")
         qr_data_string = get_next_qr_data(cam)
@@ -105,8 +105,8 @@ def send_approval(chunk_id):
     qr.show()
     print(f"Approval QR displayed for chunk {chunk_id} - keeping it visible until next chunk arrives")
 
-def choose_save_location(suggested_filename):
-    """Let user choose directory to save the received file"""    
+def choose_save_location():
+    """Let the user choose the directory to save the received file"""    
     root = tk.Tk()
     root.withdraw()
 
@@ -116,18 +116,11 @@ def choose_save_location(suggested_filename):
 
     # Let user choose directory only
     directory = filedialog.askdirectory(
-        title=f"Choose directory to save: {suggested_filename}",
+        title=f"Choose the directory to save the file",
         parent=root
     )
     
-    root.destroy()
-    
+    root.destroy()            
     if directory:
-        # Combine directory with original filename
-        save_path = os.path.join(directory, suggested_filename)
-        return save_path
-    else:
-        # Use current directory if no selection made
-        current_dir = os.getcwd()
-        save_path = os.path.join(current_dir, suggested_filename)
-        return save_path
+        return directory
+    return os.getcwd()
