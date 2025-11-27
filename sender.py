@@ -2,8 +2,10 @@ import qrcode
 import tkinter as tk
 from tkinter import filedialog
 import os
+import cv2
+import numpy as np
 from camera_handler import get_next_qr_data, get_web_cam
-from protocol_utils import check_qr_chunk_approval, create_chunks_to_send, create_qr_payload, encode_qr_data
+from protocol_utils import check_qr_chunk_approval, create_chunks_to_send, encode_qr_data
 
 def sender_main():
     cam = get_web_cam()
@@ -16,10 +18,14 @@ def sender_main():
         print(f"Sending chunk {chunk['id']}...")
         qr_data_string = encode_qr_data(chunk)
         qr = qrcode.make(qr_data_string)
-        qr.show()
+        qr_np = np.array(qr.convert('RGB'))
+        qr_window_name = f"Chunk {chunk['id']} - Sender QR"
+        cv2.imshow(qr_window_name, qr_np)
+        cv2.waitKey(1)  # Needed to display the window
         print(f"QR displayed for chunk {chunk['id']} - listening for approval...")
         wait_for_chunk_approval(cam, chunk)
         print(f"Chunk {chunk['id']} confirmed, moving to next...")
+        cv2.destroyWindow(qr_window_name)
 
 def pick_file():
     root = tk.Tk()
