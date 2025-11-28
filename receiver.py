@@ -16,9 +16,6 @@ def receiver_main():
     print("Waiting for file transfer to start...")
     
     file_metadata = wait_for_starting_chunk(cam)
-    if not file_metadata:
-        print("Failed to receive file metadata, aborting.")
-        return
     print(f"Received starting chunk with metadata.")
     print(f"Receiving file: {file_metadata['file_name']}")
     print(f"Total chunks expected: {file_metadata['total_chunks']}")

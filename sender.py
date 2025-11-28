@@ -60,7 +60,7 @@ def display_qr_for_chunk(chunk, qr_window_name):
     qr = qrcode.make(qr_data_string)
     qr_np = np.array(qr.convert('RGB'))
     cv2.imshow(qr_window_name, qr_np)
-    cv2.waitKey(1)  # Needed to display the window
+    cv2.waitKey(1) # Needed to display the window
 
 def close_qr_window(qr_window_name):
     cv2.destroyWindow(qr_window_name)
