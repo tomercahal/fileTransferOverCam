@@ -1,5 +1,5 @@
 import sys
-from reciver import receiver_main
+from receiver import receiver_main
 from sender import sender_main
 
 def main():
