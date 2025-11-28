@@ -16,16 +16,10 @@ def sender_main():
     chunks_to_send = create_chunks_to_send(file_name, file_data)
     for chunk in chunks_to_send:
         print(f"Sending chunk {chunk['id']}...")
-        qr_data_string = encode_qr_data(chunk)
-        qr = qrcode.make(qr_data_string)
-        qr_np = np.array(qr.convert('RGB'))
         qr_window_name = f"Chunk {chunk['id']} - Sender QR"
-        cv2.imshow(qr_window_name, qr_np)
-        cv2.waitKey(1)  # Needed to display the window
-        print(f"QR displayed for chunk {chunk['id']} - listening for approval...")
+        display_qr_for_chunk(chunk, qr_window_name)
         wait_for_chunk_approval(cam, chunk)
-        print(f"Chunk {chunk['id']} confirmed, moving to next...")
-        cv2.destroyWindow(qr_window_name)
+        close_qr_window(qr_window_name)
 
 def pick_file():
     root = tk.Tk()
@@ -46,7 +40,6 @@ def pick_file():
         with open(file_path, "rb") as f:
             return file_name, f.read()
     else:
-        print("No file selected.")
         return None, b""
 
 def wait_for_chunk_approval(cam, chunk):
@@ -60,3 +53,14 @@ def wait_for_chunk_approval(cam, chunk):
             received_approval = True
         else:
             print("Waiting for correct approval...")
+    print(f"Chunk {chunk['id']} confirmed, moving to next...")
+
+def display_qr_for_chunk(chunk, qr_window_name):
+    qr_data_string = encode_qr_data(chunk)
+    qr = qrcode.make(qr_data_string)
+    qr_np = np.array(qr.convert('RGB'))
+    cv2.imshow(qr_window_name, qr_np)
+    cv2.waitKey(1)  # Needed to display the window
+
+def close_qr_window(qr_window_name):
+    cv2.destroyWindow(qr_window_name)
