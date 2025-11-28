@@ -19,25 +19,21 @@ def receiver_main():
     if not file_metadata:
         print("Failed to receive file metadata, aborting.")
         return
-    
+    print(f"Received starting chunk with metadata.")
     print(f"Receiving file: {file_metadata['file_name']}")
     print(f"Total chunks expected: {file_metadata['total_chunks']}")
     save_path = os.path.join(directory_to_save_in, file_metadata['file_name'])
-    if not save_path:
-        # Use default location if no selection made
-        save_path = f"received_{file_metadata['file_name']}"
-        print(f"Using default save location: {save_path}")
     
     # Receive all data chunks
     file_data = receive_file_chunks(cam, file_metadata['total_chunks'])
     
-    if file_data:
-        # Save the reconstructed file
-        with open(save_path, "wb") as f:
-            f.write(file_data)
-        print(f"File saved successfully to: {save_path}")
-    else:
-        print("Failed to receive complete file data, aborting.")
+    # Save the reconstructed file
+    with open(save_path, "wb") as f:
+        f.write(file_data)
+    print(f"File saved successfully to: {save_path}")
+    # open the file
+    os.startfile(save_path) # @TODO: Check for corrupted files before opening
+
 
 def wait_for_starting_chunk(cam):
     """Wait for starting chunk and process the chunk that contains the file metadata"""
@@ -47,9 +43,6 @@ def wait_for_starting_chunk(cam):
         payload = decode_qr_data(qr_data_string)
         
         if payload and is_starting_chunk(payload):
-            print("Starting chunk received!")
-            print(f"File: {payload.get('file_name', 'unknown_file')}")
-            print(f"Total chunks: {payload.get('total_chunks', 0)}")
             send_approval(payload['id'])
             return {
                 'file_name': payload.get('file_name', 'unknown_file'),
@@ -68,7 +61,7 @@ def receive_file_chunks(cam, total_chunks):
         qr_data_string = get_next_qr_data(cam)
         payload = decode_qr_data(qr_data_string)
         
-        if payload and is_data_chunk(payload):
+        if payload and is_data_chunk(payload): # @TODO: Move the payload check to is_data_chunk
             chunk_id = payload['id']
             chunk_data = payload['data']
             
@@ -83,16 +76,13 @@ def receive_file_chunks(cam, total_chunks):
                 send_approval(chunk_id)
             else:
                 print(f"⚠ Duplicate chunk {chunk_id} received, ignoring")
-        elif payload:
-            print(f"⚠ Unexpected payload type received, ignoring...")
     
     # Reconstruct file data in correct order
     print("📁 Reconstructing file...")
     file_data = b""
-    for chunk_id in sorted(chunks_data.keys()):
+    for chunk_id in sorted(chunks_data.keys()): #@TODO: concat the file data the whole time should come ordered
         file_data += chunks_data[chunk_id]
     
-    print(f"✓ File reconstruction complete - {len(file_data)} bytes total")
     return file_data
 
 def send_approval(chunk_id):
@@ -100,7 +90,7 @@ def send_approval(chunk_id):
     approval_payload = create_approval_payload(chunk_id)
     approval_qr_string = encode_qr_data(approval_payload)
     
-    # Create and display approval QR code - keep it displayed
+    # @TODO: Change to cv2 like the receiver and close all windows upon sending next approval
     qr = qrcode.make(approval_qr_string)
     qr.show()
     print(f"Approval QR displayed for chunk {chunk_id} - keeping it visible until next chunk arrives")
@@ -114,7 +104,6 @@ def choose_save_location():
     root.attributes('-topmost', True)
     root.update()
 
-    # Let user choose directory only
     directory = filedialog.askdirectory(
         title=f"Choose the directory to save the file",
         parent=root
