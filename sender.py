@@ -8,10 +8,11 @@ from camera_handler import get_next_qr_data, get_web_cam
 from protocol_utils import check_qr_chunk_approval, create_chunks_to_send, encode_qr_data
 
 def sender_main():
+    """Main sender function that processes outgoing QR codes and sends the file"""
     cam = get_web_cam()
     file_name, file_data = pick_file()
     if not file_name:
-        print("No file selected.")
+        print("No file selected, aborting.")
         return
     chunks_to_send = create_chunks_to_send(file_name, file_data)
     for chunk in chunks_to_send:
@@ -20,8 +21,10 @@ def sender_main():
         display_qr_for_chunk(chunk, qr_window_name)
         wait_for_chunk_approval(cam, chunk)
         close_qr_window(qr_window_name)
+    print(f"✅ File '{file_name}' sent successfully! All {len(chunks_to_send)} chunks transferred.")
 
 def pick_file():
+    """Open file dialog to pick a file and read its data"""
     root = tk.Tk()
     root.withdraw()
     
@@ -43,6 +46,7 @@ def pick_file():
         return None, b""
 
 def wait_for_chunk_approval(cam, chunk):
+    """Wait for approval QR code from receiver for the given chunk"""
     print(f"Waiting for approval from receiver for chunk {chunk['id']}...")
     received_approval = False
     
@@ -56,6 +60,7 @@ def wait_for_chunk_approval(cam, chunk):
     print(f"Chunk {chunk['id']} confirmed, moving to next...")
 
 def display_qr_for_chunk(chunk, qr_window_name):
+    """Display QR code for the given chunk"""
     qr_data_string = encode_qr_data(chunk)
     qr = qrcode.make(qr_data_string)
     qr_np = np.array(qr.convert('RGB'))
@@ -63,4 +68,5 @@ def display_qr_for_chunk(chunk, qr_window_name):
     cv2.waitKey(1) # Needed to display the window
 
 def close_qr_window(qr_window_name):
+    """Close the QR code display window"""
     cv2.destroyWindow(qr_window_name)
