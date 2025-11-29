@@ -2,6 +2,8 @@ import os
 import qrcode
 import tkinter as tk
 from tkinter import filedialog
+import cv2
+import numpy as np
 from camera_handler import get_next_qr_data, get_web_cam
 from protocol_utils import (
     decode_qr_data, encode_qr_data, create_approval_payload,
@@ -21,14 +23,12 @@ def receiver_main():
     print(f"Total chunks expected: {file_metadata['total_chunks']}")
     save_path = os.path.join(directory_to_save_in, file_metadata['file_name'])
     
-    # Receive all data chunks
     file_data = receive_file_chunks(cam, file_metadata['total_chunks'])
     
-    # Save the reconstructed file
     with open(save_path, "wb") as f:
         f.write(file_data)
     print(f"File saved successfully to: {save_path}")
-    # open the file
+
     os.startfile(save_path) # @TODO: Check for corrupted files before opening
 
 
@@ -68,8 +68,6 @@ def receive_file_chunks(cam, total_chunks):
                 received_count += 1
                 progress = (received_count / total_chunks) * 100
                 print(f"✓ Received chunk {chunk_id} ({len(chunk_data)} bytes) - {progress:.1f}% complete")
-                
-                # Send approval for this chunk
                 send_approval(chunk_id)
             else:
                 print(f"⚠ Duplicate chunk {chunk_id} received, ignoring")
@@ -77,7 +75,7 @@ def receive_file_chunks(cam, total_chunks):
     # Reconstruct file data in correct order
     print("📁 Reconstructing file...")
     file_data = b""
-    for chunk_id in sorted(chunks_data.keys()): #@TODO: concat the file data the whole time should come ordered
+    for chunk_id in sorted(chunks_data.keys()):
         file_data += chunks_data[chunk_id]
     
     return file_data
@@ -86,10 +84,11 @@ def send_approval(chunk_id):
     """Send approval QR code for received chunk"""
     approval_payload = create_approval_payload(chunk_id)
     approval_qr_string = encode_qr_data(approval_payload)
-    
-    # @TODO: Change to cv2 like the receiver and close all windows upon sending next approval
     qr = qrcode.make(approval_qr_string)
-    qr.show()
+    qr_np = np.array(qr.convert('RGB'))
+    cv2.destroyAllWindows() # Close previous windows
+    cv2.imshow(f"Approval for chunk {chunk_id}", qr_np)
+    cv2.waitKey(1) # Needed to display the window
     print(f"Approval QR displayed for chunk {chunk_id} - keeping it visible until next chunk arrives")
 
 def choose_save_location():
