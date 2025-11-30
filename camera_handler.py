@@ -28,6 +28,9 @@ def get_qr_from_frame(frame : MatLike):
 
 def get_next_qr_data(web_cam : cv2.VideoCapture):
     while True:
+        # Process OpenCV GUI events so windows (imshow) remain responsive
+        # waitkey(1) is necessary on many systems to keep the window responsive
+        cv2.waitKey(1)
         frame = get_frame(web_cam)
         if frame is not None:
             data = get_qr_from_frame(frame)
