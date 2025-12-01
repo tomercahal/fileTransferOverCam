@@ -23,20 +23,24 @@ def decode_qr_data(qr_data_str):
         return None
 
 def create_chunks_to_send(file_name, file_data):
+    """Divide file data into chunks and create payloads for each chunk"""
     file_chunks = divide_into_chunks(file_data)
     first_chunk = create_first_qr_payload(file_name, file_chunks)
     return [first_chunk] + [create_qr_payload(chunk, i) for i, chunk in enumerate(file_chunks, start=1)]
 
 def divide_into_chunks(data, size=100):
+    """Divide data into chunks of given size"""
     return [data[i:i+size] for i in range(0, len(data), size)]
 
 def create_first_qr_payload(file_name, file_chunks):
+    """Create the first QR payload containing the file metadata"""
     payload = create_qr_payload(STARTING_CHUNK_DATA, FIRST_CHUNK_ID)
     payload["file_name"] = file_name
     payload["total_chunks"] = len(file_chunks)
     return payload
 
 def create_qr_payload(chunk, chunk_id):
+    """Create QR payload for a given chunk"""
     return {
         "id": chunk_id,
         "data": chunk
