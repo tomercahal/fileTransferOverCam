@@ -3,11 +3,6 @@ from receiver import receiver_main
 from sender import sender_main
 
 def main():
-    print('Hello, file-Transfer-over-cam!')
-    if len(sys.argv) < 2:
-        print("Usage: python main.py [sender|receiver]")
-        sender_main()
-        return
     mode = sys.argv[1]
     if mode == 'sender':
         print('Starting sender mode...')
