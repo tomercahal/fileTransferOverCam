@@ -66,5 +66,7 @@ def is_starting_chunk(payload):
 
 def is_data_chunk(payload):
     """Check if payload contains file data (not starting or approval)"""
+    if not payload:
+        return False
     return (payload.get("id", -1) > FIRST_CHUNK_ID and 
             payload.get("data") not in [STARTING_CHUNK_DATA, APPROVED_CHUNK_DATA])

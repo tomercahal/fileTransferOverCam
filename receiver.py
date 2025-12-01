@@ -52,7 +52,7 @@ def receive_file_chunks(cam, total_chunks):
         qr_data_string = get_next_qr_data(cam)
         payload = decode_qr_data(qr_data_string)
         
-        if payload and is_data_chunk(payload): # @TODO: Move the payload check to is_data_chunk
+        if is_data_chunk(payload):
             chunk_id = payload['id']
             chunk_data = payload['data']
             
