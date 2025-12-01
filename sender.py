@@ -1,12 +1,10 @@
-import qrcode
 import tkinter as tk
 from tkinter import filedialog
 import os
 import cv2
-import numpy as np
 from camera_handler import get_next_qr_data, get_web_cam
 from protocol_utils import check_qr_chunk_approval, create_chunks_to_send, encode_qr_data
-from utils import force_focus
+from utils import display_qr_centered
 
 def sender_main():
     """Main sender function that processes outgoing QR codes and sends the file"""
@@ -63,11 +61,7 @@ def wait_for_chunk_approval(cam, chunk):
 def display_qr_for_chunk(chunk, qr_window_name):
     """Display QR code for the given chunk"""
     qr_data_string = encode_qr_data(chunk)
-    qr = qrcode.make(qr_data_string)
-    qr_np = np.array(qr.convert('RGB'))
-    cv2.imshow(qr_window_name, qr_np)
-    cv2.waitKey(1) # Needed to display the window
-    force_focus(qr_window_name) # Force focus on QR window after displaying
+    display_qr_centered(qr_data_string, qr_window_name)
 
 def close_qr_window(qr_window_name):
     """Close the QR code display window"""
