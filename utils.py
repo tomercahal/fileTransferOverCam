@@ -57,3 +57,7 @@ def display_qr_centered(qr_data_string, window_name):
     cv2.imshow(window_name, qr_np)
     cv2.waitKey(1)  # Needed to display the window
     force_focus(window_name)  # Force focus on QR window after displaying
+
+def close_qr_window(qr_window_name):
+    """Close the QR code display window"""
+    cv2.destroyWindow(qr_window_name)

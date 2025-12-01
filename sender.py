@@ -1,10 +1,9 @@
 import tkinter as tk
 from tkinter import filedialog
 import os
-import cv2
 from camera_handler import get_next_qr_data, get_web_cam
 from protocol_utils import check_qr_chunk_approval, create_chunks_to_send, encode_qr_data
-from utils import display_qr_centered
+from utils import display_qr_centered, close_qr_window
 
 def sender_main():
     """Main sender function that processes outgoing QR codes and sends the file"""
@@ -62,7 +61,3 @@ def display_qr_for_chunk(chunk, qr_window_name):
     """Display QR code for the given chunk"""
     qr_data_string = encode_qr_data(chunk)
     display_qr_centered(qr_data_string, qr_window_name)
-
-def close_qr_window(qr_window_name):
-    """Close the QR code display window"""
-    cv2.destroyWindow(qr_window_name)

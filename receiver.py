@@ -1,9 +1,7 @@
 import os
-import qrcode
 import tkinter as tk
 from tkinter import filedialog
 import cv2
-import numpy as np
 from camera_handler import get_next_qr_data, get_web_cam
 from protocol_utils import (
     decode_qr_data, encode_qr_data, create_approval_payload,
@@ -63,7 +61,7 @@ def receive_file_chunks(cam, total_chunks):
             chunk_id = payload['id']
             chunk_data = payload['data']
             
-            # Store chunk data (chunks should be numbered starting from 1)
+            # Store chunk data
             if chunk_id not in chunks_data:
                 chunks_data[chunk_id] = chunk_data
                 received_count += 1
@@ -85,7 +83,7 @@ def send_approval(chunk_id):
     """Send approval QR code for received chunk"""
     approval_payload = create_approval_payload(chunk_id)
     approval_qr_string = encode_qr_data(approval_payload)
-    cv2.destroyAllWindows() # Close previous windows
+    cv2.destroyAllWindows() # Close previous approval windows
     
     window_name = f"Approval for chunk {chunk_id}"
     display_qr_centered(approval_qr_string, window_name)
