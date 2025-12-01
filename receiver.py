@@ -9,6 +9,7 @@ from protocol_utils import (
     decode_qr_data, encode_qr_data, create_approval_payload,
     is_starting_chunk, is_data_chunk
 )
+from utils import force_focus
 
 def receiver_main():
     """Main receiver function that processes incoming QR codes and reconstructs the file"""
@@ -87,8 +88,10 @@ def send_approval(chunk_id):
     qr = qrcode.make(approval_qr_string)
     qr_np = np.array(qr.convert('RGB'))
     cv2.destroyAllWindows() # Close previous windows
-    cv2.imshow(f"Approval for chunk {chunk_id}", qr_np)
+    window_name = f"Approval for chunk {chunk_id}"
+    cv2.imshow(window_name, qr_np)
     cv2.waitKey(1) # Needed to display the window
+    force_focus(window_name) # Force focus on QR window after displaying
     print(f"Approval QR displayed for chunk {chunk_id} - keeping it visible until next chunk arrives")
 
 def choose_save_location():
