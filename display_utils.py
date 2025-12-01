@@ -61,3 +61,7 @@ def display_qr_centered(qr_data_string, window_name):
 def close_qr_window(qr_window_name):
     """Close the QR code display window"""
     cv2.destroyWindow(qr_window_name)
+
+def close_all_qr_windows():
+    """Close all QR code display windows"""
+    cv2.destroyAllWindows()

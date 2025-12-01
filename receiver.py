@@ -1,10 +1,9 @@
-import cv2
 from camera_handler import get_next_qr_data, get_web_cam
 from protocol_utils import (
     decode_qr_data, encode_qr_data, create_approval_payload,
     is_starting_chunk, is_data_chunk
 )
-from display_utils import display_qr_centered
+from display_utils import display_qr_centered, close_all_qr_windows
 from file_utils import select_save_directory, save_file_data, open_file_after_save
 
 def receiver_main():
@@ -79,7 +78,7 @@ def send_approval(chunk_id):
     """Send approval QR code for received chunk"""
     approval_payload = create_approval_payload(chunk_id)
     approval_qr_string = encode_qr_data(approval_payload)
-    cv2.destroyAllWindows() # Close previous approval windows
+    close_all_qr_windows() # Close previous approval windows
     
     window_name = f"Approval for chunk {chunk_id}"
     display_qr_centered(approval_qr_string, window_name)
