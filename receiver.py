@@ -1,6 +1,3 @@
-import os
-import tkinter as tk
-from tkinter import filedialog
 import cv2
 from camera_handler import get_next_qr_data, get_web_cam
 from protocol_utils import (
@@ -8,11 +5,12 @@ from protocol_utils import (
     is_starting_chunk, is_data_chunk
 )
 from display_utils import display_qr_centered
+from file_utils import select_save_directory, save_file_data, open_file_after_save
 
 def receiver_main():
     """Main receiver function that processes incoming QR codes and reconstructs the file"""
     cam = get_web_cam()
-    directory_to_save_in = choose_save_location()
+    directory_to_save_in = select_save_directory()
     
     print("Waiting for file transfer to start...")
     
@@ -20,15 +18,13 @@ def receiver_main():
     print(f"Received starting chunk with metadata.")
     print(f"Receiving file: {file_metadata['file_name']}")
     print(f"Total chunks expected: {file_metadata['total_chunks']}")
-    save_path = os.path.join(directory_to_save_in, file_metadata['file_name'])
     
     file_data = receive_file_chunks(cam, file_metadata['total_chunks'])
     
-    with open(save_path, "wb") as f:
-        f.write(file_data)
+    save_path = save_file_data(directory_to_save_in, file_metadata['file_name'], file_data)
     print(f"File saved successfully to: {save_path}")
 
-    os.startfile(save_path)
+    open_file_after_save(save_path) # @TODO: Check for corrupted files before opening
 
 
 def wait_for_starting_chunk(cam):
@@ -89,21 +85,3 @@ def send_approval(chunk_id):
     display_qr_centered(approval_qr_string, window_name)
     print(f"Approval QR displayed for chunk {chunk_id} - keeping it visible until next chunk arrives")
 
-def choose_save_location():
-    """Let the user choose the directory to save the received file"""    
-    root = tk.Tk()
-    root.withdraw()
-
-    # Bring dialog to front and make it focused
-    root.attributes('-topmost', True)
-    root.update()
-
-    directory = filedialog.askdirectory(
-        title=f"Choose the directory to save the file",
-        parent=root
-    )
-    
-    root.destroy()            
-    if directory:
-        return directory
-    return os.getcwd()
