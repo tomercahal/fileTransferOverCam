@@ -7,7 +7,7 @@ from protocol_utils import (
     decode_qr_data, encode_qr_data, create_approval_payload,
     is_starting_chunk, is_data_chunk
 )
-from utils import display_qr_centered
+from display_utils import display_qr_centered
 
 def receiver_main():
     """Main receiver function that processes incoming QR codes and reconstructs the file"""

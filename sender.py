@@ -3,7 +3,7 @@ from tkinter import filedialog
 import os
 from camera_handler import get_next_qr_data, get_web_cam
 from protocol_utils import check_qr_chunk_approval, create_chunks_to_send, encode_qr_data
-from utils import display_qr_centered, close_qr_window
+from display_utils import display_qr_centered, close_qr_window
 
 def sender_main():
     """Main sender function that processes outgoing QR codes and sends the file"""
