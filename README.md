@@ -186,30 +186,7 @@ sequenceDiagram
 - If QR windows don't appear centered, check display scaling settings
 - Multiple monitors may affect positioning - use primary display
 
-### Installation Issues
-```bash
-# If dependencies fail to install, try:
-pip install --user -r requirements.txt
-
-# Or reinstall:
-pip install --force-reinstall -r requirements.txt
-
-# Check Python version (requires 3.8+):
-python --version
-```
-
-## License
-
-MIT License - see LICENSE file for details.
-
-## Contributing
-
-1. Fork the repository
-2. Create feature branch: `git checkout -b feature-name`
-3. Commit changes: `git commit -am 'Add feature'`
-4. Push to branch: `git push origin feature-name`
-5. Submit pull request
-
 ## Author
 
+Tomer Cahal
 Created for Computer Networks Workshop Final Project.
