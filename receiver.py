@@ -4,7 +4,7 @@ from protocol_utils import (
     is_starting_chunk, is_data_chunk
 )
 from display_utils import display_qr_centered, close_all_qr_windows
-from file_utils import select_save_directory, save_file_data, open_file_after_save
+from file_utils import select_save_directory, save_file_data, open_file
 
 def receiver_main():
     """Main receiver function that processes incoming QR codes and reconstructs the file"""
@@ -23,7 +23,7 @@ def receiver_main():
     save_path = save_file_data(directory_to_save_in, file_metadata['file_name'], file_data)
     print(f"File saved successfully to: {save_path}")
 
-    open_file_after_save(save_path) # @TODO: Check for corrupted files before opening
+    open_file(save_path)
 
 
 def wait_for_starting_chunk(cam):
@@ -83,4 +83,3 @@ def send_approval(chunk_id):
     window_name = f"Approval for chunk {chunk_id}"
     display_qr_centered(approval_qr_string, window_name)
     print(f"Approval QR displayed for chunk {chunk_id} - keeping it visible until next chunk arrives")
-

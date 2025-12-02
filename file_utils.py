@@ -19,19 +19,6 @@ def select_file_to_send():
     root.destroy()
     return file_path
 
-def read_file_data(file_path):
-    """Read file data and return filename and data"""
-    if not file_path:
-        return None, b""
-    
-    try:
-        file_name = os.path.basename(file_path)
-        with open(file_path, "rb") as f:
-            file_data = f.read()
-        return file_name, file_data
-    except (FileNotFoundError, PermissionError, OSError) as e:
-        return None, b""
-
 def select_save_directory():
     """Let the user choose the directory to save the received file"""    
     root = tk.Tk()
@@ -51,6 +38,19 @@ def select_save_directory():
         return directory
     return os.getcwd()
 
+def read_file_data(file_path):
+    """Read file data and return filename and data"""
+    if not file_path:
+        return None, b""
+    
+    try:
+        file_name = os.path.basename(file_path)
+        with open(file_path, "rb") as f:
+            file_data = f.read()
+        return file_name, file_data
+    except (FileNotFoundError, PermissionError, OSError) as e:
+        return None, b""
+
 def save_file_data(directory, filename, data):
     """Save file data to specified directory and return full path"""
     save_path = os.path.join(directory, filename)
@@ -58,7 +58,7 @@ def save_file_data(directory, filename, data):
         f.write(data)
     return save_path
 
-def open_file_after_save(file_path):
+def open_file(file_path):
     """Open the saved file with the default system application"""
     try:
         os.startfile(file_path)
