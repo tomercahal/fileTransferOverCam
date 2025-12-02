@@ -20,10 +20,13 @@ def receiver_main():
     
     file_data = receive_file_chunks(cam, file_metadata['total_chunks'])
     
-    save_path = save_file_data(directory_to_save_in, file_metadata['file_name'], file_data)
-    print(f"File saved successfully to: {save_path}")
-
-    open_file(save_path)
+    save_path, is_successful = save_file_data(directory_to_save_in, file_metadata['file_name'], file_data)
+    
+    if is_successful:
+        print(f"File saved successfully to: {save_path}")
+        open_file(save_path)
+    else:
+        print(f"Failed to save file '{file_metadata['file_name']}'. Check directory permissions and available space.")
 
 
 def wait_for_starting_chunk(cam):

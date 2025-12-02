@@ -52,11 +52,14 @@ def read_file_data(file_path):
         return None, b""
 
 def save_file_data(directory, filename, data):
-    """Save file data to specified directory and return full path"""
+    """Save file data to specified directory and return (path, success)"""
     save_path = os.path.join(directory, filename)
-    with open(save_path, "wb") as f:
-        f.write(data)
-    return save_path
+    try:
+        with open(save_path, "wb") as f:
+            f.write(data)
+        return save_path, True
+    except (FileNotFoundError, PermissionError, OSError) as e:
+        return None, False
 
 def open_file(file_path):
     """Open the saved file with the default system application"""
