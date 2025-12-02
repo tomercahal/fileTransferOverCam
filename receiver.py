@@ -36,7 +36,7 @@ def wait_for_starting_chunk(cam):
         qr_data_string = get_next_qr_data(cam)
         payload = decode_qr_data(qr_data_string)
         
-        if payload and is_starting_chunk(payload):
+        if is_starting_chunk(payload):
             send_approval(payload['id'])
             return {
                 'file_name': payload.get('file_name', 'unknown_file'),

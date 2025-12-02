@@ -64,6 +64,12 @@ class TestValidationFunctions(unittest.TestCase):
         
         self.assertFalse(result)
 
+    def test_is_starting_chunk_none_payload(self):
+        """Test is_starting_chunk with None payload"""
+        result = is_starting_chunk(None)
+        
+        self.assertFalse(result)
+
     def test_is_data_chunk_valid(self):
         """Test is_data_chunk with valid data chunk"""
         data_payload = {

@@ -62,6 +62,8 @@ def check_qr_chunk_approval(qr_data_str, current_chunk):
 
 def is_starting_chunk(payload):
     """Check if payload is the starting chunk with metadata"""
+    if not payload:
+        return False
     return payload.get("id") == FIRST_CHUNK_ID and payload.get("data") == STARTING_CHUNK_DATA
 
 def is_data_chunk(payload):
