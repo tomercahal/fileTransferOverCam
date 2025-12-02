@@ -24,11 +24,13 @@ def read_file_data(file_path):
     if not file_path:
         return None, b""
     
-    file_name = os.path.basename(file_path)
-    with open(file_path, "rb") as f:
-        file_data = f.read()
-    
-    return file_name, file_data
+    try:
+        file_name = os.path.basename(file_path)
+        with open(file_path, "rb") as f:
+            file_data = f.read()
+        return file_name, file_data
+    except (FileNotFoundError, PermissionError, OSError) as e:
+        return None, b""
 
 def select_save_directory():
     """Let the user choose the directory to save the received file"""    
