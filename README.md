@@ -188,5 +188,4 @@ sequenceDiagram
 
 ## Author
 
-Tomer Cahal
-Created for Computer Networks Workshop Final Project.
+Tomer Cahal, created for Computer Networks Workshop Final Project.
