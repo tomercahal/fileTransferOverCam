@@ -7,7 +7,6 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirna
 
 from protocol_utils import divide_into_chunks, create_chunks_to_send, FIRST_CHUNK_ID, STARTING_CHUNK_DATA
 
-
 class TestChunking(unittest.TestCase):
     """Test cases for chunking functions"""
 

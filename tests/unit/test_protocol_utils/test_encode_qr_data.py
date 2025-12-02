@@ -9,7 +9,6 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 from protocol_utils import encode_qr_data
 
-
 class TestEncodeQrData(unittest.TestCase):
     """Test cases for the encode_qr_data function"""
 

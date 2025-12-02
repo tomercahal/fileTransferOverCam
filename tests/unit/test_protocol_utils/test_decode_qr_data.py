@@ -8,7 +8,6 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirna
 
 from protocol_utils import decode_qr_data, encode_qr_data
 
-
 class TestDecodeQrData(unittest.TestCase):
     """Test cases for the decode_qr_data function"""
 
