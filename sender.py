@@ -10,23 +10,24 @@ def sender_main():
     if not file_name:
         print("No file selected, aborting.")
         return
+
     chunks_to_send = create_chunks_to_send(file_name, file_data)
     for chunk in chunks_to_send:
-        print(f"Sending chunk {chunk['id']}...")
+        print(f"Sending chunk {chunk['id']}")
         qr_window_name = f"Chunk {chunk['id']} - Sender QR"
         display_qr_for_chunk(chunk, qr_window_name)
         wait_for_chunk_approval(cam, chunk)
         close_qr_window(qr_window_name)
-    print(f"✅ File '{file_name}' sent successfully! All {len(chunks_to_send)} chunks transferred.")
+    print(f"File '{file_name}' sent successfully! All {len(chunks_to_send)} chunks transferred.")
 
 def pick_file():
-    """Select and read file for transfer"""
+    """Let's user select a file from the file explorer and reads the file content"""
     file_path = select_file_to_send()
     return read_file_data(file_path)
 
 def wait_for_chunk_approval(cam, chunk):
     """Wait for approval QR code from receiver for the given chunk"""
-    print(f"Waiting for approval from receiver for chunk {chunk['id']}...")
+    print(f"Waiting for approval from receiver for chunk {chunk['id']}")
     received_approval = False
     
     while not received_approval:
@@ -35,8 +36,8 @@ def wait_for_chunk_approval(cam, chunk):
             print(f"Approval received for chunk {chunk['id']}!")
             received_approval = True
         else:
-            print("Waiting for correct approval...")
-    print(f"Chunk {chunk['id']} confirmed, moving to next...")
+            print("Waiting for correct approval")
+    print(f"Chunk {chunk['id']} confirmed, moving to next")
 
 def display_qr_for_chunk(chunk, qr_window_name):
     """Display QR code for the given chunk"""

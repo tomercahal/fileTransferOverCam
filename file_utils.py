@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import filedialog
 
 def select_file_to_send():
-    """Open file dialog to select a file for transfer"""
+    """Open file dialog to select a file for transfer, returns the file path"""
     root = tk.Tk()
     root.withdraw()
     
@@ -20,7 +20,7 @@ def select_file_to_send():
     return file_path
 
 def select_save_directory():
-    """Let the user choose the directory to save the received file"""    
+    """Let the user choose the directory to save the received file, returns the chosen directory path"""    
     root = tk.Tk()
     root.withdraw()
 
@@ -52,7 +52,7 @@ def read_file_data(file_path):
         return None, b""
 
 def save_file_data(directory, filename, data):
-    """Save file data to specified directory and return (path, success)"""
+    """Save file data to specified directory and return (path, is_successful)"""
     save_path = os.path.join(directory, filename)
     try:
         with open(save_path, "wb") as f:
@@ -62,7 +62,7 @@ def save_file_data(directory, filename, data):
         return None, False
 
 def open_file(file_path):
-    """Open the saved file with the default system application"""
+    """Open the the file in the given path"""
     try:
         os.startfile(file_path)
     except Exception as e:

@@ -12,7 +12,6 @@ def get_web_cam():
     else:
         return cv2.VideoCapture(0)
 
-
 def get_frame(web_cam : cv2.VideoCapture):
     """Capture a single frame from the web camera"""
     ret, frame = web_cam.read()
@@ -23,17 +22,15 @@ def get_frame(web_cam : cv2.VideoCapture):
         print("Failed to grab frame")
         return None
 
-
 def get_qr_from_frame(frame : MatLike):
     """Detect and decode QR code from a given frame"""
-    data, _, _ = qr_code.detectAndDecode(frame)
+    data, _, _ = qr_code.detectAndDecode(frame) # Uses cv2 capability to detect and decode QR codes
     return data
 
 def get_next_qr_data(web_cam : cv2.VideoCapture):
     """Continuously capture frames until QR code detected and returns its data"""
     while True:
-        # Process OpenCV GUI events so windows (imshow) remain responsive
-        # waitkey(1) is necessary on many systems to keep the window responsive
+        # waitkey(1) is necessary on many systems to keep the qr window responsive (the .imshow call we use)
         cv2.waitKey(1)
         frame = get_frame(web_cam)
         if frame is not None:

@@ -54,20 +54,20 @@ def create_approval_payload(chunk_id):
     }
 
 def check_qr_chunk_approval(qr_data_str, current_chunk):
-    """Check if received QR data is approval for current chunk"""
+    """Check if received QR data is an approval for the current chunk"""
     decoded_data = decode_qr_data(qr_data_str)
     if not decoded_data:
         return False
     return decoded_data.get("id") == current_chunk.get("id") and decoded_data.get("data") == APPROVED_CHUNK_DATA
 
 def is_starting_chunk(payload):
-    """Check if payload is the starting chunk with metadata"""
+    """Check if the given payload is a starting chunk"""
     if not payload:
         return False
     return payload.get("id") == FIRST_CHUNK_ID and payload.get("data") == STARTING_CHUNK_DATA
 
 def is_data_chunk(payload):
-    """Check if payload contains file data (not starting or approval)"""
+    """Check if the given payload contains file data (not a starting or approval payload)"""
     if not payload:
         return False
     return (payload.get("id", -1) > FIRST_CHUNK_ID and 

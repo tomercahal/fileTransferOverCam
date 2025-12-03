@@ -11,7 +11,7 @@ def receiver_main():
     cam = get_web_cam()
     directory_to_save_in = select_save_directory()
     
-    print("Waiting for file transfer to start...")
+    print("Waiting for file transfer to start")
     
     file_metadata = wait_for_starting_chunk(cam)
     print(f"Received starting chunk with metadata.")
@@ -19,20 +19,19 @@ def receiver_main():
     print(f"Total chunks expected: {file_metadata['total_chunks']}")
     
     file_data = receive_file_chunks(cam, file_metadata['total_chunks'])
-    
     save_path, is_successful = save_file_data(directory_to_save_in, file_metadata['file_name'], file_data)
     
     if is_successful:
         print(f"File saved successfully to: {save_path}")
         open_file(save_path)
     else:
-        print(f"Failed to save file '{file_metadata['file_name']}'. Check directory permissions and available space.")
+        print(f"Failed to save file '{file_metadata['file_name']}'")
 
 
 def wait_for_starting_chunk(cam):
     """Wait for starting chunk and process the chunk that contains the file metadata"""
     while True:
-        print("Scanning for starting chunk...")
+        print("Scanning for starting chunk")
         qr_data_string = get_next_qr_data(cam)
         payload = decode_qr_data(qr_data_string)
         
@@ -50,7 +49,7 @@ def receive_file_chunks(cam, total_chunks):
     
     while received_count < total_chunks:
         progress = (received_count / total_chunks) * 100
-        print(f"Progress: {progress:.1f}% - Waiting for chunk {received_count + 1}/{total_chunks}...")
+        print(f"Progress: {progress:.1f}% - Waiting for chunk {received_count + 1}/{total_chunks}")
         
         qr_data_string = get_next_qr_data(cam)
         payload = decode_qr_data(qr_data_string)
@@ -59,12 +58,11 @@ def receive_file_chunks(cam, total_chunks):
             chunk_id = payload['id']
             chunk_data = payload['data']
             
-            # Store chunk data
+            # Store chunk data if it's a new one
             if chunk_id not in chunks_data:
                 chunks_data[chunk_id] = chunk_data
                 received_count += 1
                 progress = (received_count / total_chunks) * 100
-                print(f"Received chunk {chunk_id} ({len(chunk_data)} bytes) - {progress:.1f}% complete")
                 send_approval(chunk_id)
             else:
                 print(f"Duplicate chunk {chunk_id} received, ignoring")
