@@ -1,0 +1,5 @@
+Hello, World!
+This file is a test file for the integration testing.
+It contains multiple lines to test chunking.
+This Line also contains some special characters: !@#$%^&*()
+Another line! This was a cool project!
