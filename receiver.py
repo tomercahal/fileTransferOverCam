@@ -64,13 +64,13 @@ def receive_file_chunks(cam, total_chunks):
                 chunks_data[chunk_id] = chunk_data
                 received_count += 1
                 progress = (received_count / total_chunks) * 100
-                print(f"✓ Received chunk {chunk_id} ({len(chunk_data)} bytes) - {progress:.1f}% complete")
+                print(f"Received chunk {chunk_id} ({len(chunk_data)} bytes) - {progress:.1f}% complete")
                 send_approval(chunk_id)
             else:
-                print(f"⚠ Duplicate chunk {chunk_id} received, ignoring")
+                print(f"Duplicate chunk {chunk_id} received, ignoring")
     
     # Reconstruct file data in correct order
-    print("📁 Reconstructing file...")
+    print("Reconstructing the file from received chunks")
     file_data = b""
     for chunk_id in sorted(chunks_data.keys()):
         file_data += chunks_data[chunk_id]
