@@ -20,7 +20,7 @@ def select_file_to_send():
     return file_path
 
 def select_save_directory():
-    """Let the user choose the directory to save the received file, returns the chosen directory path"""    
+    """Let the user choose the directory to save the received file, returns the chosen directory path or None if cancelled"""
     root = tk.Tk()
     root.withdraw()
 
@@ -36,7 +36,7 @@ def select_save_directory():
     root.destroy()            
     if directory:
         return directory
-    return os.getcwd()
+    return None
 
 def read_file_data(file_path):
     """Read file data and return filename and data"""

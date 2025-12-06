@@ -10,6 +10,9 @@ def receiver_main():
     """Main receiver function that processes incoming QR codes and reconstructs the file"""
     cam = get_web_cam()
     directory_to_save_in = select_save_directory()
+    if not directory_to_save_in:
+        print("No directory selected, aborting.")
+        return
     
     print("Waiting for file transfer to start")
     

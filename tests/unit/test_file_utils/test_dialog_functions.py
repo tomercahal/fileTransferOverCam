@@ -57,8 +57,7 @@ class TestDialogFunctions(unittest.TestCase):
 
     @patch('file_utils.filedialog.askdirectory')
     @patch('file_utils.tk.Tk')
-    @patch('file_utils.os.getcwd')
-    def test_select_save_directory_success(self, mock_getcwd, mock_tk, mock_askdirectory):
+    def test_select_save_directory_success(self, mock_tk, mock_askdirectory):
         """Test successful directory selection"""
         mock_root = MagicMock()
         mock_tk.return_value = mock_root
@@ -82,13 +81,10 @@ class TestDialogFunctions(unittest.TestCase):
         )
         
         self.assertEqual(result, test_directory)
-        # Should not call getcwd() when directory is selected
-        mock_getcwd.assert_not_called()
 
     @patch('file_utils.filedialog.askdirectory')
     @patch('file_utils.tk.Tk')
-    @patch('file_utils.os.getcwd')
-    def test_select_save_directory_cancel(self, mock_getcwd, mock_tk, mock_askdirectory):
+    def test_select_save_directory_cancel(self, mock_tk, mock_askdirectory):
         """Test when user cancels directory selection"""
         mock_root = MagicMock()
         mock_tk.return_value = mock_root
@@ -96,15 +92,10 @@ class TestDialogFunctions(unittest.TestCase):
         # Mock user canceling dialog
         mock_askdirectory.return_value = ""
         
-        # Mock current working directory
-        current_dir = "/current/working/directory"
-        mock_getcwd.return_value = current_dir
-        
         result = select_save_directory()
         
-        # Should return current working directory as fallback
-        self.assertEqual(result, current_dir)
-        mock_getcwd.assert_called_once()
+        # Should return None when user cancels
+        self.assertIsNone(result)
 
 if __name__ == '__main__':
     unittest.main()
