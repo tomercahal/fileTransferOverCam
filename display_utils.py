@@ -42,18 +42,24 @@ def display_qr_centered(qr_data_string, window_name):
     """Display QR code centered on screen with natural size"""
     qr = qrcode.make(qr_data_string)
     qr_np = np.array(qr.convert('RGB'))
-    
-    # Create window with auto size but position it in center of screen
-    cv2.namedWindow(window_name, cv2.WINDOW_AUTOSIZE)
-    
-    # Position window in center (accounting for QR size ~290x290)
-    center_x = (SCREEN_WIDTH - 290) // 2
-    center_y = (SCREEN_HEIGHT - 290) // 2
-    cv2.moveWindow(window_name, center_x, center_y)
-    
+    # Assume QR fits on screen: center the window using the image size
+    h, w = qr_np.shape[:2]
+    x = max(0, (SCREEN_WIDTH - w) // 2)
+    y = max(0, (SCREEN_HEIGHT - h) // 2)
+
+    cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+    try:
+        cv2.resizeWindow(window_name, w, h)
+    except Exception:
+        pass
+    try:
+        cv2.moveWindow(window_name, x, y)
+    except Exception:
+        pass
+
     cv2.imshow(window_name, qr_np)
-    cv2.waitKey(1)  # Needed to display the window
-    force_focus(window_name)  # Force focus on QR window after displaying
+    cv2.waitKey(1) # Needed to display the window
+    force_focus(window_name) # Force focus on QR window after displaying
 
 def close_qr_window(qr_window_name):
     """Close the QR code display window"""
