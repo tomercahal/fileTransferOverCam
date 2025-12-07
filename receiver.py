@@ -5,6 +5,7 @@ from protocol_utils import (
 )
 from display_utils import display_qr_centered, close_all_qr_windows
 from file_utils import select_save_directory, save_file_data, open_file
+import time
 
 def receiver_main():
     """Main receiver function that processes incoming QR codes and reconstructs the file"""
@@ -69,7 +70,7 @@ def receive_file_chunks(cam, total_chunks):
                 send_approval(chunk_id)
             else:
                 print(f"Duplicate chunk {chunk_id} received, ignoring")
-    
+    time.sleep(1.5) # Added small sleep delay to ensure approval QR is seen by sender
     # Reconstruct file data in correct order
     print("Reconstructing the file from received chunks")
     file_data = b""
